@@ -1,0 +1,20 @@
+<app-navbar></app-navbar>
+<div class="container-fluid">
+    <ul class="list-group list-group-flush my-5">
+        <li *ngFor="let chat of chats" class="card p-2 my-1 bg-dark text-light">
+            <span>{{chat.name}}</span>
+            <h4 class="mx-2">{{chat.text}}</h4>
+        </li>
+    </ul>
+    <br class="m-3">
+    <form class="fixed-bottom bg-dark">
+        <div class="row m-3">
+            <div class="col-10">
+                <input class="form-control" type="text">
+            </div>
+            <div class="col-2">
+                <button class="btn btn-warning col-12">Send</button>
+            </div>
+        </div>
+    </form>
+</div>
