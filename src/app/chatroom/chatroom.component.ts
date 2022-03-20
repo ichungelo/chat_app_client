@@ -9,12 +9,15 @@ import { Chats } from './chatroom';
   styleUrls: ['./chatroom.component.css']
 })
 export class ChatroomComponent implements OnInit {
+  newChat!: string;
+  chatList: string[] = []
 
   constructor(public userService: UserService) { }
 
   token: Token = {
     token: localStorage.getItem("token")
   }
+
 
   chats: Chats[] = [
     {
@@ -178,6 +181,15 @@ export class ChatroomComponent implements OnInit {
         window.location.href = "/"
       }
     })
-  }
 
+    this.userService.getNewChat().subscribe((chat: string) => {
+      this.chatList.push(chat)
+    })
+  }
+  
+  
+  sendChat() {
+    this.userService.sendChat(this.newChat)
+    this.newChat = ""
+  }
 }

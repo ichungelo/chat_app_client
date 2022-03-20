@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { io } from "socket.io-client"
+
 import { Login, Token } from './login/login';
 import { Register } from './register/register';
 
@@ -9,8 +11,10 @@ import { Register } from './register/register';
 })
 export class UserService {
 
+  public chat$: BehaviorSubject<string> = new BehaviorSubject("")
   constructor(private http: HttpClient) { }
 
+  //? LOGIN BUSINESS
   public registerUser(register: Register): Observable<any> {
     return this.http.post("http://localhost:3000/api/auth/register", register)
   }
@@ -26,4 +30,20 @@ export class UserService {
   public verifyToken(token: Token): Observable<any> {
     return this.http.post("http://localhost:3000/api/auth/verify", token)
   }
+
+  //?WEBSOCKET BUSINESS
+  socket = io("http://localhost:3000")
+
+  public sendChat(chat: any) {
+    this.socket.emit("chat", chat)
+  }
+
+  public getNewChat = () => {
+    this.socket.on("chat", (chat) => {
+      this.chat$.next(chat)
+    })
+
+    return this.chat$.asObservable()
+  }
+
 }
