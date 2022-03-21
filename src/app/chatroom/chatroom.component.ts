@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../user.service';
 import { Token } from '../login/login';
-import { Chats } from './chatroom';
+import { Chats, Payload } from './chatroom';
 
 @Component({
   selector: 'app-chatroom',
@@ -9,187 +9,48 @@ import { Chats } from './chatroom';
   styleUrls: ['./chatroom.component.css']
 })
 export class ChatroomComponent implements OnInit {
-  newChat!: string;
-  chatList: string[] = []
-
   constructor(public userService: UserService) { }
+  payload: Payload = {
+    name: "",
+    username: ""
+  }
+
+  newChat: Chats = {
+    name: "",
+    text: ""
+  }
+  
+  chatList: Chats[] = []
 
   token: Token = {
     token: localStorage.getItem("token")
   }
 
-
-  chats: Chats[] = [
-    {
-      name: "Krisna Satriadi",
-      text: "Hello"
-    },
-    {
-      name: "Andrika Rissita",
-      text: "Hello there"
-    },
-    {
-      name: "Krisna Satriadi",
-      text: "Hows your day"
-    },
-    {
-      name: "Andrika Rissita",
-      text: "Quite good actually"
-    },
-    {
-      name: "Krisna Satriadi",
-      text: "Hello"
-    },
-    {
-      name: "Andrika Rissita",
-      text: "Hello there"
-    },
-    {
-      name: "Krisna Satriadi",
-      text: "Hows your day"
-    },
-    {
-      name: "Andrika Rissita",
-      text: "Quite good actually"
-    },{
-      name: "Krisna Satriadi",
-      text: "Hello"
-    },
-    {
-      name: "Andrika Rissita",
-      text: "Hello there"
-    },
-    {
-      name: "Krisna Satriadi",
-      text: "Hows your day"
-    },
-    {
-      name: "Andrika Rissita",
-      text: "Quite good actually"
-    },{
-      name: "Krisna Satriadi",
-      text: "Hello"
-    },
-    {
-      name: "Andrika Rissita",
-      text: "Hello there"
-    },
-    {
-      name: "Krisna Satriadi",
-      text: "Hows your day"
-    },
-    {
-      name: "Andrika Rissita",
-      text: "Quite good actually"
-    },{
-      name: "Krisna Satriadi",
-      text: "Hello"
-    },
-    {
-      name: "Andrika Rissita",
-      text: "Hello there"
-    },
-    {
-      name: "Krisna Satriadi",
-      text: "Hows your day"
-    },
-    {
-      name: "Andrika Rissita",
-      text: "Quite good actually"
-    },{
-      name: "Krisna Satriadi",
-      text: "Hello"
-    },
-    {
-      name: "Andrika Rissita",
-      text: "Hello there"
-    },
-    {
-      name: "Krisna Satriadi",
-      text: "Hows your day"
-    },
-    {
-      name: "Andrika Rissita",
-      text: "Quite good actually"
-    },{
-      name: "Krisna Satriadi",
-      text: "Hello"
-    },
-    {
-      name: "Andrika Rissita",
-      text: "Hello there"
-    },
-    {
-      name: "Krisna Satriadi",
-      text: "Hows your day"
-    },
-    {
-      name: "Andrika Rissita",
-      text: "Quite good actually"
-    },{
-      name: "Krisna Satriadi",
-      text: "Hello"
-    },
-    {
-      name: "Andrika Rissita",
-      text: "Hello there"
-    },
-    {
-      name: "Krisna Satriadi",
-      text: "Hows your day"
-    },
-    {
-      name: "Andrika Rissita",
-      text: "Quite good actually"
-    },{
-      name: "Krisna Satriadi",
-      text: "Hello"
-    },
-    {
-      name: "Andrika Rissita",
-      text: "Hello there"
-    },
-    {
-      name: "Krisna Satriadi",
-      text: "Hows your day"
-    },
-    {
-      name: "Andrika Rissita",
-      text: "Quite good actually"
-    },{
-      name: "Krisna Satriadi",
-      text: "Hello"
-    },
-    {
-      name: "Andrika Rissita",
-      text: "Hello there"
-    },
-    {
-      name: "Krisna Satriadi",
-      text: "Hows your day"
-    },
-    {
-      name: "Andrika Rissita",
-      text: "Quite good actually"
-    },
-  ]
-
   ngOnInit(): void {
     this.userService.verifyToken(this.token).subscribe((Response: any) => {
-      console.log(Response)
-      if ( Response.success == false) {
+      if (Response.success == false) {
         window.location.href = "/"
+      } else {
+        console.log(Response)
+        this.payload = {
+          name: Response.payload.name,
+          username: Response.payload.username
+        }
       }
     })
 
-    this.userService.getNewChat().subscribe((chat: string) => {
+    console.log(`${this.payload.name}`)
+    this.userService.getNewChat().subscribe((chat: any) => {
       this.chatList.push(chat)
     })
   }
-  
-  
+
   sendChat() {
+    this.newChat = {
+      name: this.payload.name,
+      text: this.newChat.text
+    }
     this.userService.sendChat(this.newChat)
-    this.newChat = ""
+    window.scrollTo(0, document.body.scrollHeight)
   }
 }
