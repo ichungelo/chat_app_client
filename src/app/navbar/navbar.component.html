@@ -4,5 +4,8 @@
     <img src="../../assets/ichun.png" width="30" height="30" class="d-inline-block align-top" alt="">
     Chatter
   </a>
+  <div *ngIf="isLogin">
+    <button class="btn btn-warning" (click)="logoutUser()">{{buttonLogout}}</button>
+  </div>
 </nav>
 <br class="m-3">
